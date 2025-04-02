@@ -3,12 +3,24 @@
 #include <stdlib.h>
 #include "arena.h"
 
-START_TEST(test_mkarena)
+START_TEST(test_mkarena_returns_nonnull)
 {
   arena_t a;
 
   a = mkarena(1);
   ck_assert_ptr_nonnull(a.beg);
+}
+END_TEST
+
+START_TEST(test_alloc_allocates)
+{
+  arena_t a;
+  char *s;
+
+  a = mkarena(5);
+  s = new(&a, char, 5);
+  strcpy(s, "test");
+  ck_assert_str_eq(s, "test");
 }
 END_TEST
 
@@ -36,7 +48,8 @@ wwwd_suite(void)
 
   s = suite_create("wwwd");
   tc = tcase_create("Arena");
-  tcase_add_test(tc, test_mkarena);
+  tcase_add_test(tc, test_mkarena_returns_nonnull);
+  tcase_add_test(tc, test_alloc_allocates);
   tcase_add_test(tc, test_alloc_jumps_on_fail);
   suite_add_tcase(s, tc);
 
