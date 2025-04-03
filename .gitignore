@@ -1,3 +1,4 @@
+*~
 *.log
 *.o
 .deps/
@@ -16,7 +17,6 @@ config.h
 config.h.in
 config.status
 configure
-configure~
 src/wwwd
 stamp-h1
 tests/*.trs
