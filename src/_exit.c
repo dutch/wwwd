@@ -14,8 +14,14 @@
  * License along with wwwd. If not, see <https://www.gnu.org/licenses/>.
  */
 
-void
+void __attribute__ ((noreturn))
 _exit(int status)
 {
-  asm volatile ("syscall" :: "r" (60), "D" (status) : "rcx", "r11", "memory");
+#if defined(__x86_64__)
+  asm volatile ("syscall" :: "a" (60), "D" (status) : "rcx", "r11", "memory");
+#elif defined(__i386__)
+  asm volatile ("int $0x80" :: "a" (1), "b" (status) : "memory");
+#endif
+
+  for (;;) {}
 }
